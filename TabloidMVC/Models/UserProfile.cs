@@ -1,4 +1,6 @@
-﻿using Microsoft.Data.SqlClient.Server;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using Microsoft.Data.SqlClient.Server;
 using System;
 using System.Runtime.Intrinsics.X86;
 
@@ -15,6 +17,7 @@ namespace TabloidMVC.Models
         public string ImageLocation { get; set; }
         public int UserTypeId { get; set; }
         public UserType UserType { get; set; }
+        [DisplayName("Author")]
         public string FullName
         {
             get
