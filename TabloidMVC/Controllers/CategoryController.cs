@@ -79,7 +79,7 @@ namespace TabloidMVC.Controllers
         public ActionResult Delete(int id)
         {
             Category category = _categoryRepo.GetCategoryById(id);
-            return View();
+            return View(category);
         }
 
         // POST: CategoryController/Delete/5
