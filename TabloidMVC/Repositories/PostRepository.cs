@@ -72,7 +72,7 @@ namespace TabloidMVC.Repositories
                               LEFT JOIN Category c ON p.CategoryId = c.id
                               LEFT JOIN UserProfile u ON p.UserProfileId = u.id
                               LEFT JOIN UserType ut ON u.UserTypeId = ut.id
-                         WHERE u.id = @userId AND p.UserProfileId = @userId";
+                         WHERE u.id = @userId AND p.UserProfileId = @userId AND PublishDateTime < SYSDATETIME()" ;
                     cmd.Parameters.AddWithValue("@userId", userId);
                     var reader = cmd.ExecuteReader();
 
