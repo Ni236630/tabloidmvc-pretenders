@@ -5,6 +5,6 @@ namespace TabloidMVC.Repositories
     public interface IUserProfileRepository
     {
         UserProfile GetByEmail(string email);
-        void CreateUser();
+        void CreateUser(UserProfile user);
     }
 }

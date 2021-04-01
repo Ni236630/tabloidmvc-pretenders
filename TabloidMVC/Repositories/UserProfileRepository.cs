@@ -67,7 +67,7 @@ namespace TabloidMVC.Repositories
                  VALUES (@displayName, @firstName, @lastName, @email, @createDateTime, @imageLocation, @userTypeId);
                     ";
 
-                    DateTime userCreatedDate = new DateTime();
+                    DateTime userCreatedDate = DateTime.UtcNow;
                     int authorId = 2;
 
                     cmd.Parameters.AddWithValue("@displayName", user.DisplayName);
@@ -93,5 +93,7 @@ namespace TabloidMVC.Repositories
                 }
             }
         }
+
+       
     }
 }
