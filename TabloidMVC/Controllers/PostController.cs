@@ -2,7 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.VisualBasic;
+using System;
+using System.Collections.Generic;
 using System.Security.Claims;
+using TabloidMVC.Models;
 using TabloidMVC.Models.ViewModels;
 using TabloidMVC.Repositories;
 
@@ -13,11 +16,16 @@ namespace TabloidMVC.Controllers
     {
         private readonly IPostRepository _postRepository;
         private readonly ICategoryRepository _categoryRepository;
+        private readonly IUserProfileRepository _userProfileRepository;
 
-        public PostController(IPostRepository postRepository, ICategoryRepository categoryRepository)
+        public PostController(
+            IPostRepository postRepository, 
+            ICategoryRepository categoryRepository, 
+            IUserProfileRepository userProfileRepository)
         {
             _postRepository = postRepository;
             _categoryRepository = categoryRepository;
+            _userProfileRepository = userProfileRepository;
         }
 
 
@@ -77,6 +85,81 @@ namespace TabloidMVC.Controllers
             {
                 vm.CategoryOptions = _categoryRepository.GetAll();
                 return View(vm);
+            }
+        }
+
+        // GET: PostController/Edit/#
+        [Authorize]
+        public ActionResult Edit(int id)
+        {
+            int currentUserId = GetCurrentUserProfileId();
+            List<Category> categories = _categoryRepository.GetAll();
+            UserProfile userProfile = _userProfileRepository.GetById(currentUserId);
+            Post post = _postRepository.GetPublishedPostById(id);
+
+            if ((post == null || currentUserId != post.UserProfileId) && userProfile.UserTypeId != 1)
+            {
+                return NotFound();
+            }
+            else
+            {
+                var vm = new PostCreateViewModel()
+                {
+                    Post = post,
+                    CategoryOptions = categories
+                };
+
+                return View(vm);
+            }
+        }
+
+        // POST: PostController/Edit/#
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(int id, Post post)
+        {
+            try
+            {
+                _postRepository.UpdatePost(post);
+
+                return RedirectToAction("Index");
+            }
+            catch (Exception)
+            {
+                return View(post);
+            }
+        }
+
+        // GET: PostController/Delete/#
+        [Authorize]
+        public ActionResult Delete(int id)
+        {
+            int currentUserId = GetCurrentUserProfileId();
+            UserProfile userProfile = _userProfileRepository.GetById(currentUserId);
+
+            Post post = _postRepository.GetPublishedPostById(id);
+
+            if (post.UserProfileId != currentUserId && userProfile.UserTypeId != 1)
+            {
+                return NotFound();
+            }
+            return View(post);
+        }
+
+        // POST: PostController/Delete/#
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete(int id, Post post)
+        {
+            try
+            {
+                _postRepository.DeletePost(id);
+
+                return RedirectToAction("Index");
+            }
+            catch (Exception)
+            {
+                return View(post);
             }
         }
 
