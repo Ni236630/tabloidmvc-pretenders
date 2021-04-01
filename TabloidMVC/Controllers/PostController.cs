@@ -20,11 +20,23 @@ namespace TabloidMVC.Controllers
             _categoryRepository = categoryRepository;
         }
 
+
         public IActionResult Index()
         {
             var posts = _postRepository.GetAllPublishedPosts();
             return View(posts);
         }
+
+        public IActionResult MyPosts(int userProfileId)
+        {
+            int userId = GetCurrentUserProfileId();
+            var posts = _postRepository.GetAllUserPosts(userId);
+            return View(posts);
+        }
+
+
+
+
 
         public IActionResult Details(int id)
         {
