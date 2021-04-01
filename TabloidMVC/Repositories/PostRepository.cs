@@ -50,7 +50,6 @@ namespace TabloidMVC.Repositories
                 }
             }
         }
-
         public List<Post> GetAllUserPosts(int userId)
         {
             using (var conn = Connection)
@@ -89,8 +88,6 @@ namespace TabloidMVC.Repositories
                 }
             }
         }
-
-
         public Post GetPublishedPostById(int id)
         {
             using (var conn = Connection)
@@ -131,7 +128,6 @@ namespace TabloidMVC.Repositories
                 }
             }
         }
-
         public Post GetUserPostById(int id, int userProfileId)
         {
             using (var conn = Connection)
@@ -172,8 +168,6 @@ namespace TabloidMVC.Repositories
                 }
             }
         }
-
-
         public void Add(Post post)
         {
             using (var conn = Connection)
@@ -202,7 +196,6 @@ namespace TabloidMVC.Repositories
                 }
             }
         }
-
         private Post NewPostFromReader(SqlDataReader reader)
         {
             return new Post()
@@ -237,9 +230,7 @@ namespace TabloidMVC.Repositories
                     }
                 }
             };
-        }
-        
-
+        }    
         public void UpdatePost(Post post)
         {
             using (SqlConnection conn = Connection)
@@ -272,7 +263,6 @@ namespace TabloidMVC.Repositories
                 }
             }
         }
-
         public void DeletePost(int postId)
         {
             using (SqlConnection conn = Connection)
