@@ -19,6 +19,12 @@ namespace TabloidMVC.Controllers
             _userProfileRepository = userProfileRepository;
         }
 
+        // GET: Accounts
+        public ActionResult Index()
+        {
+            List<UserProfile> users = _userProfileRepository.GetAllUsers();
+            return View(users);
+        }
         public IActionResult Login()
         {
             return View();

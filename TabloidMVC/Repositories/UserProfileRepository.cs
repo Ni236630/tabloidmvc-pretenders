@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System;
+using System.Collections.Generic;
 using TabloidMVC.Models;
 using TabloidMVC.Utils;
 
@@ -8,6 +9,48 @@ namespace TabloidMVC.Repositories
     public class UserProfileRepository : BaseRepository, IUserProfileRepository
     {
         public UserProfileRepository(IConfiguration config) : base(config) { }
+
+        public List<UserProfile> GetAllUsers()
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        SELECT up.Id, up.DisplayName, up.Email, up.FirstName, up.LastName, up.ImageLocation, up.UserTypeId, ut.Name
+                        FROM UserProfile up
+                        LEFT JOIN UserType ut on ut.Id = up.UserTypeId
+                        ORDER BY up.DisplayName
+                    ";
+                    var reader = cmd.ExecuteReader();
+                    List<UserProfile> users = new List<UserProfile>();
+
+                    while(reader.Read())
+                    {
+                        UserProfile user = new UserProfile
+                        {
+                            Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                            Email = reader.GetString(reader.GetOrdinal("Email")),
+                            DisplayName = reader.GetString(reader.GetOrdinal("DisplayName")),
+                            FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
+                            LastName = reader.GetString(reader.GetOrdinal("LastName")),
+                            ImageLocation = reader.IsDBNull(reader.GetOrdinal("ImageLocation")) ? "No Image" : reader.GetString(reader.GetOrdinal("ImageLocation")),
+                            UserType = new UserType
+                            {
+                                Name = reader.GetString(reader.GetOrdinal("Name"))
+                            }
+                        };
+                       
+                       
+
+                        users.Add(user);
+                    }
+                        reader.Close();
+                        return users;
+                }
+            }
+        }
 
         public UserProfile GetByEmail(string email)
         {
