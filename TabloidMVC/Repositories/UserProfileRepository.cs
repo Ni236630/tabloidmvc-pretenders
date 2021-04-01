@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using System;
 using TabloidMVC.Models;
 using TabloidMVC.Utils;
 
@@ -50,6 +51,45 @@ namespace TabloidMVC.Repositories
                     reader.Close();
 
                     return userProfile;
+                }
+            }
+        }
+        public void CreateUser(UserProfile user)
+        {
+            using(var conn = Connection)
+            {
+                conn.Open();
+                using(var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                 INSERT INTO UserProfile (DisplayName, FirstName, LastName, Email, CreateDateTime, ImageLocation, UserTypeId)
+                 OUTPUT INSERTED.ID
+                 VALUES (@displayName, @firstName, @lastName, @email, @createDateTime, @imageLocation, @userTypeId);
+                    ";
+
+                    DateTime userCreatedDate = new DateTime();
+                    int authorId = 2;
+
+                    cmd.Parameters.AddWithValue("@displayName", user.DisplayName);
+                    cmd.Parameters.AddWithValue("@firstName", user.FirstName);
+                    cmd.Parameters.AddWithValue("@lastName", user.LastName);
+                    cmd.Parameters.AddWithValue("@email", user.Email);
+                    cmd.Parameters.AddWithValue("@createDateTime", userCreatedDate);
+                    cmd.Parameters.AddWithValue("@userTypeId", authorId);
+
+                    //check to see if this is null
+                    if(user.ImageLocation == null)
+                    {
+                        cmd.Parameters.AddWithValue("@imageLocation", DBNull.Value);
+                    }
+                    else
+                    {
+
+                        cmd.Parameters.AddWithValue("@imageLocation", user.ImageLocation);
+                    }
+
+                    int newUserId = (int)cmd.ExecuteScalar();
+                    user.Id = newUserId;
                 }
             }
         }
