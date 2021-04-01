@@ -11,5 +11,7 @@ namespace TabloidMVC.Repositories
         List<Post> GetAllUserPosts(int userId);
         Post GetPublishedPostById(int id);
         Post GetUserPostById(int id, int userProfileId);
+        void UpdatePost(Post post);
+        void DeletePost(int postId);
     }
 }

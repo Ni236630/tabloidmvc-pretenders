@@ -50,7 +50,6 @@ namespace TabloidMVC.Repositories
                 }
             }
         }
-
         public List<Post> GetAllUserPosts(int userId)
         {
             using (var conn = Connection)
@@ -89,8 +88,6 @@ namespace TabloidMVC.Repositories
                 }
             }
         }
-
-
         public Post GetPublishedPostById(int id)
         {
             using (var conn = Connection)
@@ -131,7 +128,6 @@ namespace TabloidMVC.Repositories
                 }
             }
         }
-
         public Post GetUserPostById(int id, int userProfileId)
         {
             using (var conn = Connection)
@@ -172,8 +168,6 @@ namespace TabloidMVC.Repositories
                 }
             }
         }
-
-
         public void Add(Post post)
         {
             using (var conn = Connection)
@@ -202,7 +196,6 @@ namespace TabloidMVC.Repositories
                 }
             }
         }
-
         private Post NewPostFromReader(SqlDataReader reader)
         {
             return new Post()
@@ -237,7 +230,58 @@ namespace TabloidMVC.Repositories
                     }
                 }
             };
+        }    
+        public void UpdatePost(Post post)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                            UPDATE Post
+                            SET 
+                                Title = @title, 
+                                Content = @content, 
+                                ImageLocation = @imageLocation, 
+                                CreateDateTime = @createDateTime, 
+                                PublishDateTime = @publishDateTime,
+                                IsApproved = @isApproved,
+                                CategoryId = @categoryId
+                            WHERE Id = @id";
+
+                    cmd.Parameters.AddWithValue("@title", post.Title);
+                    cmd.Parameters.AddWithValue("@content", post.Content);
+                    cmd.Parameters.AddWithValue("@imageLocation", post.ImageLocation);
+                    cmd.Parameters.AddWithValue("@createDateTime", post.CreateDateTime);
+                    cmd.Parameters.AddWithValue("@publishDateTime", post.PublishDateTime);
+                    cmd.Parameters.AddWithValue("@isApproved", 1);
+                    cmd.Parameters.AddWithValue("@categoryId", post.CategoryId);
+                    cmd.Parameters.AddWithValue("@id", post.Id);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
         }
-        
+        public void DeletePost(int postId)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                            DELETE FROM Post
+                            WHERE Id = @id
+                        ";
+
+                    cmd.Parameters.AddWithValue("@id", postId);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
     }
 }
