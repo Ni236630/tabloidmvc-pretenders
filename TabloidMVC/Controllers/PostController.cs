@@ -104,7 +104,7 @@ namespace TabloidMVC.Controllers
                     CategoryOptions = categories
                 };
 
-            return View(vm);
+                return View(vm);
             }
         }
 

@@ -248,7 +248,7 @@ namespace TabloidMVC.Repositories
                                 CreateDateTime = @createDateTime, 
                                 PublishDateTime = @publishDateTime,
                                 IsApproved = @isApproved,
-                                CategoryId = @categoryId,
+                                CategoryId = @categoryId
                             WHERE Id = @id";
 
                     cmd.Parameters.AddWithValue("@title", post.Title);
@@ -256,8 +256,9 @@ namespace TabloidMVC.Repositories
                     cmd.Parameters.AddWithValue("@imageLocation", post.ImageLocation);
                     cmd.Parameters.AddWithValue("@createDateTime", post.CreateDateTime);
                     cmd.Parameters.AddWithValue("@publishDateTime", post.PublishDateTime);
-                    cmd.Parameters.AddWithValue("@isApproved", post.IsApproved);
+                    cmd.Parameters.AddWithValue("@isApproved", 1);
                     cmd.Parameters.AddWithValue("@categoryId", post.CategoryId);
+                    cmd.Parameters.AddWithValue("@id", post.Id);
 
                     cmd.ExecuteNonQuery();
                 }
