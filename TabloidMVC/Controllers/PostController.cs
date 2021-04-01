@@ -16,11 +16,16 @@ namespace TabloidMVC.Controllers
     {
         private readonly IPostRepository _postRepository;
         private readonly ICategoryRepository _categoryRepository;
+        private readonly IUserProfileRepository _userProfileRepository;
 
-        public PostController(IPostRepository postRepository, ICategoryRepository categoryRepository)
+        public PostController(
+            IPostRepository postRepository, 
+            ICategoryRepository categoryRepository, 
+            IUserProfileRepository userProfileRepository)
         {
             _postRepository = postRepository;
             _categoryRepository = categoryRepository;
+            _userProfileRepository = userProfileRepository;
         }
 
 
@@ -89,10 +94,10 @@ namespace TabloidMVC.Controllers
         {
             int currentUserId = GetCurrentUserProfileId();
             List<Category> categories = _categoryRepository.GetAll();
-
+            UserProfile userProfile = _userProfileRepository.GetById(currentUserId);
             Post post = _postRepository.GetPublishedPostById(id);
 
-            if (post == null || currentUserId != post.UserProfileId)
+            if ((post == null || currentUserId != post.UserProfileId) && userProfile.UserTypeId != 1)
             {
                 return NotFound();
             }
@@ -130,10 +135,11 @@ namespace TabloidMVC.Controllers
         public ActionResult Delete(int id)
         {
             int currentUserId = GetCurrentUserProfileId();
+            UserProfile userProfile = _userProfileRepository.GetById(currentUserId);
 
             Post post = _postRepository.GetPublishedPostById(id);
 
-            if (post.UserProfileId != currentUserId)
+            if (post.UserProfileId != currentUserId && userProfile.UserTypeId != 1)
             {
                 return NotFound();
             }
