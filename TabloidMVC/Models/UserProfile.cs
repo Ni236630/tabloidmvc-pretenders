@@ -18,6 +18,8 @@ namespace TabloidMVC.Models
 
         [DisplayName("Creation Date")]
         public DateTime CreateDateTime { get; set; }
+
+        [DisplayName("Profile Image")]
         public string ImageLocation { get; set; }
 
         [DisplayName("Account Type")]
