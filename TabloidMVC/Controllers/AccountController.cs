@@ -87,5 +87,33 @@ namespace TabloidMVC.Controllers
             await HttpContext.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
+
+        // GET: Account/Edit/5
+        public ActionResult Edit(int id)
+        {
+            UserProfile user = _userProfileRepository.GetById(id);
+            
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return View(user);
+        }
+
+        // POST: Account/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(int id, UserProfile user)
+        {
+            try
+            {
+                _userProfileRepository.UpdateUserProfile(user);
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                return View(user);
+            }
+        }
     }
 }
