@@ -19,6 +19,12 @@ namespace TabloidMVC.Controllers
             _userProfileRepository = userProfileRepository;
         }
 
+        // GET: Accounts
+        public ActionResult Index()
+        {
+            List<UserProfile> users = _userProfileRepository.GetAllUsers();
+            return View(users);
+        }
         public IActionResult Login()
         {
             return View();
@@ -39,6 +45,7 @@ namespace TabloidMVC.Controllers
             {
                 new Claim(ClaimTypes.NameIdentifier, userProfile.Id.ToString()),
                 new Claim(ClaimTypes.Email, userProfile.Email),
+                new Claim(ClaimTypes.Role, userProfile.UserType.Name),
             };
 
             var claimsIdentity = new ClaimsIdentity(
