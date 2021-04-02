@@ -1,0 +1,65 @@
+﻿@model IEnumerable<TabloidMVC.Models.UserProfile>
+
+@{
+    ViewData["Title"] = "Index";
+}
+<div class="container">
+
+    <h1>All Users</h1>
+
+
+
+
+    <table class="table">
+        <thead>
+            <tr>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.FullName)
+                </th>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.DisplayName)
+                </th>
+
+
+                <th>
+                    @Html.DisplayNameFor(model => model.UserType.Name)
+                </th>
+
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FullName)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DisplayName)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UserType.Name)
+                    </td>
+
+                    <td>
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-primary mx-1" title="View">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-primary mx-1" title="Edit">
+                            <i class="fas fa-pencil-alt"></i>
+                        </a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-primary mx-1" title="Delete">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
