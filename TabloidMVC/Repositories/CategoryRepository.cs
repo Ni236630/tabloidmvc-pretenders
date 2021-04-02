@@ -19,7 +19,8 @@ namespace TabloidMVC.Repositories
                 {
                     cmd.CommandText = @"SELECT id, name 
                                         FROM Category
-                                        ORDER BY name ASC";
+                                        ORDER BY name ASC
+                                        WHERE IsDelete = 0";
                     var reader = cmd.ExecuteReader();
 
                     var categories = new List<Category>();
@@ -112,15 +113,16 @@ namespace TabloidMVC.Repositories
             }
         }
 
-        //delete a category by id
+        //soft delete a category by id
         public void DeleteCategory(int categoryId)
         {
-            using(SqlConnection conn = Connection)
+            using (SqlConnection conn = Connection)
             {
                 conn.Open();
-                using(SqlCommand cmd = conn.CreateCommand())
+                using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @"DELETE FROM Category
+                    cmd.CommandText = @"UPDATE Category
+                                        SET IsDeleted = 1
                                         Where Id = @id";
 
                     cmd.Parameters.AddWithValue("@id", categoryId);
@@ -128,5 +130,6 @@ namespace TabloidMVC.Repositories
                 }
             }
         }
+
     }
 }
