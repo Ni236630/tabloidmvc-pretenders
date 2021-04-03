@@ -110,12 +110,25 @@ namespace TabloidMVC.Controllers
         {
             UserProfile user = _userProfileRepository.GetById(id);
             List<UserType> types = _userTypeRepository.GetAllTypes();
+            List<UserProfile> users = _userProfileRepository.GetAllUsers();
+            List<UserProfile> adminProfiles = new List<UserProfile>();
 
+            for(int i = 0; i < users.Count; i++)
+            {
+                if(users[i].UserType.Name == "Admin")
+                {
+                    adminProfiles.Add(users[i]);
+                }
+            }
+        
             EditUserProfileViewModel vm = new EditUserProfileViewModel()
             {
                 UserProfile = user,
-                UserTypes = types
+                UserTypes = types,
+                Users = adminProfiles
+
             };
+
 
             if (vm == null)
             {
@@ -129,16 +142,19 @@ namespace TabloidMVC.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, EditUserProfileViewModel vm)
         {
-            try
-            {
-                _userProfileRepository.UpdateUserProfile(id, vm.UserProfile);
-                return RedirectToAction("Index");
-            }
-            catch (Exception ex)
-            {
-                return View(vm);
-            }
+           
+                try
+                {
+                    _userProfileRepository.UpdateUserProfile(id, vm.UserProfile);
+                    return RedirectToAction("Index");
+                }
+                catch (Exception ex)
+                {
+                    return View(vm);
+                }
+         }
+         
         }
     }
-}
+
 
