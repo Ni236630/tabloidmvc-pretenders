@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using TabloidMVC.Models;
+using TabloidMVC.Models.ViewModels;
 using TabloidMVC.Repositories;
 
 namespace TabloidMVC.Controllers
@@ -13,10 +14,13 @@ namespace TabloidMVC.Controllers
     public class AccountController : Controller
     {
         private readonly IUserProfileRepository _userProfileRepository;
+        private readonly IUserTypeRepository _userTypeRepository;
 
-        public AccountController(IUserProfileRepository userProfileRepository)
+        public AccountController(IUserProfileRepository userProfileRepository,
+                                    IUserTypeRepository userTypeRepository)
         {
             _userProfileRepository = userProfileRepository;
+            _userTypeRepository = userTypeRepository;
         }
 
         // GET: Accounts
@@ -92,27 +96,34 @@ namespace TabloidMVC.Controllers
         public ActionResult Edit(int id)
         {
             UserProfile user = _userProfileRepository.GetById(id);
-            
-            if (user == null)
+            List<UserType> types = _userTypeRepository.GetAllTypes();
+
+            EditUserProfileViewModel vm = new EditUserProfileViewModel()
+            {
+                UserProfile = user,
+                UserTypes = types
+            };
+
+            if (vm == null)
             {
                 return NotFound();
             }
-            return View(user);
+            return View(vm);
         }
 
         // POST: Account/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, UserProfile user)
+        public ActionResult Edit(int id, EditUserProfileViewModel vm)
         {
             try
             {
-                _userProfileRepository.UpdateUserProfile(user);
+                _userProfileRepository.UpdateUserProfile(id, vm.UserProfile);
                 return RedirectToAction("Index");
             }
             catch (Exception ex)
             {
-                return View(user);
+                return View(vm);
             }
         }
     }

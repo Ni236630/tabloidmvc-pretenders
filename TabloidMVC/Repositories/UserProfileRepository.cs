@@ -183,7 +183,7 @@ namespace TabloidMVC.Repositories
             }
         }
 
-        public void UpdateUserProfile(UserProfile user)
+        public void UpdateUserProfile(int id, UserProfile user)
         {
             using(var conn = Connection)
             {
@@ -201,6 +201,7 @@ namespace TabloidMVC.Repositories
                             UserTypeId = @userTypeId
                         WHERE Id = @id
                     ";
+                    cmd.Parameters.AddWithValue("@id", id);
                     cmd.Parameters.AddWithValue("@firstName", user.FirstName);
                     cmd.Parameters.AddWithValue("@lastName", user.LastName);
                     cmd.Parameters.AddWithValue("@displayName", user.DisplayName);

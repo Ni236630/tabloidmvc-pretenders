@@ -18,8 +18,8 @@ namespace TabloidMVC.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                            SELECT Id [Name]
-                            FROM UserTypes
+                            SELECT Id, [Name]
+                            FROM UserType
                     ";
                     var reader = cmd.ExecuteReader();
                     List<UserType> types = new List<UserType>();

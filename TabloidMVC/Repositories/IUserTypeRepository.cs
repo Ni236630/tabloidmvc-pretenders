@@ -4,7 +4,7 @@ using TabloidMVC.Models;
 
 namespace TabloidMVC.Repositories
 {
-    interface IUserTypeRepository
+   public interface IUserTypeRepository
     {
         List<UserType> GetAllTypes();
     }
