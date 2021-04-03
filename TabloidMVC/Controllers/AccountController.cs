@@ -92,6 +92,19 @@ namespace TabloidMVC.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        // GET: AccountController/Details/5
+        public ActionResult Details(int id)
+        {
+            UserProfile userProfile = _userProfileRepository.GetById(id);
+     
+            if (userProfile == null)
+            {
+                return NotFound();
+            }
+
+            return View(userProfile);
+        }
+
         // GET: Account/Edit/5
         public ActionResult Edit(int id)
         {
@@ -128,3 +141,4 @@ namespace TabloidMVC.Controllers
         }
     }
 }
+
