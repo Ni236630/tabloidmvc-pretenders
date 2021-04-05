@@ -61,8 +61,6 @@ namespace TabloidMVC.Repositories
                 {
                     cmd.CommandText = @"INSERT INTO Comment (PostId, UserProfileId, Subject, Content, CreateDateTime)
                                         OUTPUT INSERTED.Id
-                                        JOIN Post p ON p.Id = Comment.PostId
-                                        JOIN UserProfile u ON u.Id = Comment.UserProfileId 
                                         VALUES (@postId, @userProfileId, @subject, @content, @createDateTime )";
                     cmd.Parameters.AddWithValue("@postId", comment.post.Id);
                     cmd.Parameters.AddWithValue("@userProfileId", comment.user.Id);

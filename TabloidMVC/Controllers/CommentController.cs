@@ -61,13 +61,15 @@ namespace TabloidMVC.Controllers
         // POST: CommentController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(CommentViewModel vm)
+        public ActionResult Create(CommentViewModel vm, int id)
         {
             try
             {
+                vm.post = _postRepository.GetPublishedPostById(id);
+                vm.user = _userProfileRepository.GetById(GetCurrentUserProfileId());
                 vm.comment.CreateDateTime = DateAndTime.Now;
                 _commentRepository.AddComment(vm);
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Details", "Post", new { id = id });
             }
             catch
             {
