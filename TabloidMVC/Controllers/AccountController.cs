@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using TabloidMVC.Models;
+using TabloidMVC.Models.ViewModels;
 using TabloidMVC.Repositories;
 
 namespace TabloidMVC.Controllers
@@ -13,10 +14,13 @@ namespace TabloidMVC.Controllers
     public class AccountController : Controller
     {
         private readonly IUserProfileRepository _userProfileRepository;
+        private readonly IUserTypeRepository _userTypeRepository;
 
-        public AccountController(IUserProfileRepository userProfileRepository)
+        public AccountController(IUserProfileRepository userProfileRepository,
+                                    IUserTypeRepository userTypeRepository)
         {
             _userProfileRepository = userProfileRepository;
+            _userTypeRepository = userTypeRepository;
         }
 
         // GET: Accounts
@@ -100,6 +104,57 @@ namespace TabloidMVC.Controllers
 
             return View(userProfile);
         }
+
+        // GET: Account/Edit/5
+        public ActionResult Edit(int id)
+        {
+            UserProfile user = _userProfileRepository.GetById(id);
+            List<UserType> types = _userTypeRepository.GetAllTypes();
+            List<UserProfile> users = _userProfileRepository.GetAllUsers();
+            List<UserProfile> adminProfiles = new List<UserProfile>();
+
+            for(int i = 0; i < users.Count; i++)
+            {
+                if(users[i].UserType.Name == "Admin")
+                {
+                    adminProfiles.Add(users[i]);
+                }
+            }
+        
+            EditUserProfileViewModel vm = new EditUserProfileViewModel()
+            {
+                UserProfile = user,
+                UserTypes = types,
+                Users = adminProfiles
+
+            };
+
+
+            if (vm == null)
+            {
+                return NotFound();
+            }
+            return View(vm);
+        }
+
+        // POST: Account/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(int id, EditUserProfileViewModel vm)
+        {
+           
+                try
+                {
+                    _userProfileRepository.UpdateUserProfile(id, vm.UserProfile);
+                    return RedirectToAction("Index");
+                }
+                catch (Exception ex)
+                {
+                    return View(vm);
+                }
+         }
+         
+        }
     }
-}
+
 
