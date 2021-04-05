@@ -10,6 +10,6 @@ namespace TabloidMVC.Repositories
         void CreateUser(UserProfile user);
         void UpdateUserProfile(int id, UserProfile user);
         List<UserProfile> GetAllUsers();
-        UserProfile getAdminCount();
+        int getAdminCount();
     }
 }

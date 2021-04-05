@@ -214,7 +214,7 @@ namespace TabloidMVC.Repositories
             }
         }
 
-        public UserProfile getAdminCount()
+        public int getAdminCount()
         {
             using (var conn = Connection)
             {
@@ -226,13 +226,11 @@ namespace TabloidMVC.Repositories
                                         WHERE up.UserTypeId = 1";
 
                     var reader = cmd.ExecuteReader();
-                    UserProfile adminCount = null;
+                    int adminCount = 0;
                     if (reader.Read())
                     {
-                        adminCount = new UserProfile()
-                        {
-                           AdminCount = reader.GetInt32(reader.GetOrdinal("numOfAdmin")),
-                        };
+                        adminCount = reader.GetInt32(reader.GetOrdinal("numOfAdmin"));
+                       
                     }
 
                     reader.Close();

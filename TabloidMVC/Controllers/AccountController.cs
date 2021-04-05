@@ -111,7 +111,7 @@ namespace TabloidMVC.Controllers
             UserProfile user = _userProfileRepository.GetById(id);
             List<UserType> types = _userTypeRepository.GetAllTypes();
          
-            UserProfile admins = _userProfileRepository.getAdminCount();
+            int admins = _userProfileRepository.getAdminCount();
 
            
         
@@ -119,7 +119,7 @@ namespace TabloidMVC.Controllers
             {
                 UserProfile = user,
                 UserTypes = types,
-                NumOfAdmin = admins
+              
 
             };
 
@@ -137,9 +137,12 @@ namespace TabloidMVC.Controllers
         public ActionResult Edit(int id, EditUserProfileViewModel vm)
         {
             // if user in edit is only admin left and if sql query count is 1 then re-assign profiletypeid as 1; update rest
-
+           int getUser = GetCurrentUserId();
+            int adminCount = _userProfileRepository.getAdminCount();
             // write method in repo returning (single) number of admins in system
-          
+          if (adminCount <= 1 && getUser == id)
+            {
+                vm.UserProfile.UserTypeId = 1;
                 try
                 {
                     _userProfileRepository.UpdateUserProfile(id, vm.UserProfile);
@@ -149,9 +152,27 @@ namespace TabloidMVC.Controllers
                 {
                     return View(vm);
                 }
+            }
+            else
+            {
+                try
+                {
+                    _userProfileRepository.UpdateUserProfile(id, vm.UserProfile);
+                    return RedirectToAction("Index");
+                }
+                catch (Exception ex)
+                {
+                    return View(vm);
+                }
+            }
          }
-         
+        private int GetCurrentUserId()
+        {
+            string id = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return int.Parse(id);
         }
+
+    }
     }
 
 
