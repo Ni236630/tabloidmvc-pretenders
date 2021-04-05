@@ -19,8 +19,8 @@ namespace TabloidMVC.Repositories
                 {
                     cmd.CommandText = @"SELECT id, name 
                                         FROM Category
-                                        ORDER BY name ASC
-                                        WHERE IsDelete = 0";
+                                        WHERE IsDeleted IS NULL
+                                        ORDER BY name ASC";
                     var reader = cmd.ExecuteReader();
 
                     var categories = new List<Category>();
