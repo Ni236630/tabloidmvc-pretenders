@@ -213,6 +213,33 @@ namespace TabloidMVC.Repositories
                 }
             }
         }
+
+        public int getAdminCount()
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using(var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"SELECT Count(up.UserTypeId) as numOfAdmin
+                                        FROM UserProfile up
+                                        WHERE up.UserTypeId = 1";
+
+                    var reader = cmd.ExecuteReader();
+                    int adminCount = 0;
+                    if (reader.Read())
+                    {
+                        adminCount = reader.GetInt32(reader.GetOrdinal("numOfAdmin"));
+                       
+                    }
+
+                    reader.Close();
+
+                    return adminCount;
+                }
+
+            }
+        }
        
     }
 }

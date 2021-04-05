@@ -110,22 +110,16 @@ namespace TabloidMVC.Controllers
         {
             UserProfile user = _userProfileRepository.GetById(id);
             List<UserType> types = _userTypeRepository.GetAllTypes();
-            List<UserProfile> users = _userProfileRepository.GetAllUsers();
-            List<UserProfile> adminProfiles = new List<UserProfile>();
+         
+            int admins = _userProfileRepository.getAdminCount();
 
-            for(int i = 0; i < users.Count; i++)
-            {
-                if(users[i].UserType.Name == "Admin")
-                {
-                    adminProfiles.Add(users[i]);
-                }
-            }
+           
         
             EditUserProfileViewModel vm = new EditUserProfileViewModel()
             {
                 UserProfile = user,
                 UserTypes = types,
-                Users = adminProfiles
+                AdminCount = admins
 
             };
 
@@ -143,6 +137,12 @@ namespace TabloidMVC.Controllers
         public ActionResult Edit(int id, EditUserProfileViewModel vm)
         {
            
+           int getUser = GetCurrentUserId();
+           int adminCount = _userProfileRepository.getAdminCount();
+            
+          if (adminCount <= 1 && getUser == id)
+            {
+                vm.UserProfile.UserTypeId = 1;
                 try
                 {
                     _userProfileRepository.UpdateUserProfile(id, vm.UserProfile);
@@ -152,9 +152,27 @@ namespace TabloidMVC.Controllers
                 {
                     return View(vm);
                 }
+            }
+            else
+            {
+                try
+                {
+                    _userProfileRepository.UpdateUserProfile(id, vm.UserProfile);
+                    return RedirectToAction("Index");
+                }
+                catch (Exception ex)
+                {
+                    return View(vm);
+                }
+            }
          }
-         
+        private int GetCurrentUserId()
+        {
+            string id = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return int.Parse(id);
         }
+
+    }
     }
 
 
