@@ -1,0 +1,49 @@
+﻿@model TabloidMVC.Models.ViewModels.CommentViewModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+
+<div class="container pt-5">
+    <h4>New Comment</h4>
+    <hr />
+    <div class="row justify-content-center">
+        <div class="card col-md-12 col-lg-8">
+            <form class="mt-5 card-body" asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input asp-for="comment.Id" class="form-control" type="hidden" />
+                <input asp-for="comment.PostId" class="form-control" type="hidden" />
+                <input asp-for="comment.UserProfileId" class="form-control" type="hidden" />
+                <div class="form-group">
+                    <label asp-for="comment.Subject" class="control-label"></label>
+                    <input asp-for="comment.Subject" class="form-control" />
+                    <span asp-validation-for="comment.Subject" class="text-danger"></span>
+
+                </div>
+                <div class="form-group">
+                    <label asp-for="comment.Content" class="control-label"></label>
+                    <textarea asp-for="comment.Content" rows="10" class="form-control comment__content-input" ></textarea>
+                    <span asp-validation-for="comment.Content" class="text-danger"></span>
+
+                </div>
+                <div class="form-group">
+                    
+                    <input asp-for="comment.CreateDateTime" class="form-control" type="hidden" />
+                    
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary btn-block" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

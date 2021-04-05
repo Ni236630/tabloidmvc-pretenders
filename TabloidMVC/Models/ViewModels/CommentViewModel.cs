@@ -9,6 +9,8 @@ namespace TabloidMVC.Models.ViewModels
     {
         [DisplayName("Comment")]
         public List<Comment> comments { get; set; }
+
+        public Comment comment { get; set; }
         public Post post { get; set; }
         [DisplayName("User Name")]
         public UserProfile user { get; set; }

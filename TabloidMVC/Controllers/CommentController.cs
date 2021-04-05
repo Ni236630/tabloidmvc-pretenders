@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using TabloidMVC.Models;
 using TabloidMVC.Models.ViewModels;
@@ -14,13 +16,13 @@ namespace TabloidMVC.Controllers
     {
         private readonly ICommentRepository _commentRepository;
         private readonly IPostRepository _postRepository;
-       // private readonly IUserProfileRepository _userProfileRepository;
+       private readonly IUserProfileRepository _userProfileRepository;
 
-        public CommentController(ICommentRepository commentRepository, IPostRepository postRepository)
+        public CommentController(ICommentRepository commentRepository, IPostRepository postRepository, IUserProfileRepository userProfileRepository)
         {
             _commentRepository = commentRepository;
             _postRepository = postRepository;
-           // _userProfileRepository = userProfileRepository;
+           _userProfileRepository = userProfileRepository;
         }
         
         
@@ -48,23 +50,28 @@ namespace TabloidMVC.Controllers
         }
 
         // GET: CommentController/Create
-        public ActionResult Create()
+        public ActionResult Create(int id)
         {
-            return View();
+            var vm = new CommentViewModel();
+            vm.post = _postRepository.GetPublishedPostById(id);
+            vm.user = _userProfileRepository.GetById(GetCurrentUserProfileId());
+            return View(vm);
         }
 
         // POST: CommentController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(CommentViewModel vm)
         {
             try
             {
+                vm.comment.CreateDateTime = DateAndTime.Now;
+                _commentRepository.AddComment(vm);
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
-                return View();
+                return View(vm);
             }
         }
 
@@ -109,5 +116,11 @@ namespace TabloidMVC.Controllers
                 return View();
             }
         }
+        private int GetCurrentUserProfileId()
+        {
+            string id = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return int.Parse(id);
+        }
     }
+
 }

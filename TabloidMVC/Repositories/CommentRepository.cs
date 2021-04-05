@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TabloidMVC.Models;
+using TabloidMVC.Models.ViewModels;
 
 namespace TabloidMVC.Repositories
 {
@@ -47,6 +48,32 @@ namespace TabloidMVC.Repositories
                     reader.Close();
 
                     return comments;
+                }
+            }
+        }
+
+        public void AddComment(CommentViewModel comment)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"INSERT INTO Comment (PostId, UserProfileId, Subject, Content, CreateDateTime)
+                                        OUTPUT INSERTED.Id
+                                        JOIN Post p ON p.Id = Comment.PostId
+                                        JOIN UserProfile u ON u.Id = Comment.UserProfileId 
+                                        VALUES (@postId, @userProfileId, @subject, @content, @createDateTime )";
+                    cmd.Parameters.AddWithValue("@postId", comment.post.Id);
+                    cmd.Parameters.AddWithValue("@userProfileId", comment.user.Id);
+                    cmd.Parameters.AddWithValue("@subject", comment.comment.Subject);
+                    cmd.Parameters.AddWithValue("@content", comment.comment.Content);
+                    cmd.Parameters.AddWithValue("@createDateTime", comment.comment.CreateDateTime);
+
+
+                    int id = (int)cmd.ExecuteScalar();
+
+                    comment.comment.Id = id;
                 }
             }
         }
