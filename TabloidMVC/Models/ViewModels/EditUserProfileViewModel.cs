@@ -6,6 +6,6 @@ namespace TabloidMVC.Models.ViewModels
     {
         public UserProfile UserProfile { get; set; }
         public List<UserType> UserTypes { get; set; }
-      
+        public int AdminCount { get; set; }
     }
 }

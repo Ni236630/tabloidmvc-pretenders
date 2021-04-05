@@ -119,7 +119,7 @@ namespace TabloidMVC.Controllers
             {
                 UserProfile = user,
                 UserTypes = types,
-              
+                AdminCount = admins
 
             };
 
@@ -136,10 +136,10 @@ namespace TabloidMVC.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, EditUserProfileViewModel vm)
         {
-            // if user in edit is only admin left and if sql query count is 1 then re-assign profiletypeid as 1; update rest
+           
            int getUser = GetCurrentUserId();
-            int adminCount = _userProfileRepository.getAdminCount();
-            // write method in repo returning (single) number of admins in system
+           int adminCount = _userProfileRepository.getAdminCount();
+            
           if (adminCount <= 1 && getUser == id)
             {
                 vm.UserProfile.UserTypeId = 1;
