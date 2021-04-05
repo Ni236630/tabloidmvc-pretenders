@@ -110,22 +110,16 @@ namespace TabloidMVC.Controllers
         {
             UserProfile user = _userProfileRepository.GetById(id);
             List<UserType> types = _userTypeRepository.GetAllTypes();
-            List<UserProfile> users = _userProfileRepository.GetAllUsers();
-            List<UserProfile> adminProfiles = new List<UserProfile>();
+         
+            UserProfile admins = _userProfileRepository.getAdminCount();
 
-            for(int i = 0; i < users.Count; i++)
-            {
-                if(users[i].UserType.Name == "Admin")
-                {
-                    adminProfiles.Add(users[i]);
-                }
-            }
+           
         
             EditUserProfileViewModel vm = new EditUserProfileViewModel()
             {
                 UserProfile = user,
                 UserTypes = types,
-                Users = adminProfiles
+                NumOfAdmin = admins
 
             };
 
@@ -142,7 +136,10 @@ namespace TabloidMVC.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, EditUserProfileViewModel vm)
         {
-           
+            // if user in edit is only admin left and if sql query count is 1 then re-assign profiletypeid as 1; update rest
+
+            // write method in repo returning (single) number of admins in system
+          
                 try
                 {
                     _userProfileRepository.UpdateUserProfile(id, vm.UserProfile);

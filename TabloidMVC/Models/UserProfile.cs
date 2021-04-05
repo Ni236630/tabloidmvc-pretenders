@@ -33,5 +33,6 @@ namespace TabloidMVC.Models
                 return $"{FirstName} {LastName}";
             }
         }
+       public int AdminCount { get; set; }
     }
 }
