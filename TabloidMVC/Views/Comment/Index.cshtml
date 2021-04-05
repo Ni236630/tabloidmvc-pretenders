@@ -1,4 +1,4 @@
-﻿@model IEnumerable<TabloidMVC.Models.ViewModels.CommentViewModel>
+﻿@model TabloidMVC.Models.ViewModels.CommentViewModel
 
 @{
     ViewData["Title"] = "Index";
@@ -9,7 +9,7 @@
     <p>
         <a asp-action="Create">Create New</a>
     </p>
-    <table class="table">
+    <table class="table table-striped">
         <thead>
             <tr>
 
@@ -17,16 +17,16 @@
                     @Html.DisplayNameFor(model => model.post.Title)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.comments.)
+                    @Html.DisplayNameFor(model => model.post.UserProfile)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Subject)
+                    Subject
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Content)
+                    Content
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.CreateDateTime)
+                    Created On
                 </th>
                 <th></th>
             </tr>
@@ -37,10 +37,10 @@
                 <tr>
 
                     <td>
-                        @Html.DisplayFor(modelItem => item.post.Title)
+                        @Html.DisplayFor(model => model.post.Title)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.UserProfileId)
+                        @Html.DisplayFor(model => model.post.UserProfile.DisplayName)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Subject)
