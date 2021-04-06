@@ -33,6 +33,12 @@ namespace TabloidMVC.Controllers
         {
             return View();
         }
+        //GET: Deativated Accounts!!!
+        public ActionResult DeactivatedIndex()
+        {
+            List<UserProfile> deactivatedUsers = _userProfileRepository.GetDeactivated();
+            return View(deactivatedUsers);
+        }
 
         [HttpPost]
         public async Task<IActionResult> Login(Credentials credentials)
