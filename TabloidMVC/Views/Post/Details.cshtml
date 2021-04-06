@@ -28,6 +28,9 @@
                 <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-outline-primary mx-1" title="Delete">
                     <i class="fas fa-trash"></i>
                 </a>
+                <a asp-controller="Tag" asp-action="ManageTags" asp-route-id="@Model.Id" class="btn btn-outline-primary mx-1" title="Manage Tags">
+                    <i class="fas fa-tags"></i>
+                </a>
             </div>
         </section>
         <hr />
@@ -42,5 +45,19 @@
         <section class="row post__content">
             <p class="col-sm-12 mt-5">@Html.DisplayFor(model => model.Content)</p>
         </section>
-    </div>
+        <section class="row post__tags">
+            @if (Model.PostTags != null)
+            {
+
+                <ul>
+                    @foreach (var item in Model.PostTags)
+                    {
+                        <li>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </li>
+                    }
+                </ul>
+            }
+        </section>
+        </div>
 </div>

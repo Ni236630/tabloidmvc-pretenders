@@ -1,0 +1,15 @@
+﻿@model TabloidMVC.Models.ViewModels.ManageTagViewModel
+
+@{
+    ViewData["Title"] = "ManageTags";
+}
+<div class="container pt-5">
+    <h1>ManageTags</h1>
+
+    @using (Html.BeginForm())
+    {
+        @Html.ListBoxFor(t => t.SelectedTags, Model.Tags)
+        <br />
+        <input type="submit" value="Submit" />
+    }
+</div>

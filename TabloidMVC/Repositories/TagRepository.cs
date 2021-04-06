@@ -62,8 +62,39 @@ namespace TabloidMVC.Repositories
                     reader.Close();
 
                     return tag;
+                }
+            }
+        }
 
+        public List<Tag> GetPostTags(int postId)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"SELECT t.Id, t.Name 
+                                        FROM Tag t
+                                        JOIN PostTag pt ON pt.tagId = t.id
+                                        WHERE pt.postId = @postId
+                                        ORDER BY name ASC";
+                    cmd.Parameters.AddWithValue("@postId", postId);
+                    var reader = cmd.ExecuteReader();
 
+                    var tags = new List<Tag>();
+
+                    while (reader.Read())
+                    {
+                        tags.Add(new Tag()
+                        {
+                            Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                            Name = reader.GetString(reader.GetOrdinal("name")),
+                        });
+                    }
+
+                    reader.Close();
+
+                    return tags;
                 }
             }
         }
@@ -104,8 +135,7 @@ namespace TabloidMVC.Repositories
                 }
             }
         }
-
-        
+  
         public void DeleteTag(Tag tag)
         {
             using (var conn = Connection)
@@ -123,7 +153,41 @@ namespace TabloidMVC.Repositories
 
                 }
             }
+        }
 
+        public void DeleteAllPostTags(int postId)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"DELETE PostTag 
+                                        FROM PostTag pt 
+                                        WHERE pt.PostId = @id";
+
+                    cmd.Parameters.AddWithValue("@id", postId);              
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public void AddPostTags(int tagId, int postId)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"INSERT INTO PostTag (PostId, TagId) 
+                                        VALUES (@postId, @tagId)";
+
+                    cmd.Parameters.AddWithValue("@postId", postId);
+                    cmd.Parameters.AddWithValue("@tagId", tagId);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
         }
     }
 }

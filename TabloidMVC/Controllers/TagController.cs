@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TabloidMVC.Models;
+using TabloidMVC.Models.ViewModels;
 using TabloidMVC.Repositories;
 
 namespace TabloidMVC.Controllers
@@ -20,9 +22,6 @@ namespace TabloidMVC.Controllers
             _tagRepository = tagRepository;
             _postRepository = postRepository;
         }
-
-
-
 
         // GET: TagController
         public ActionResult Index()
@@ -115,6 +114,50 @@ namespace TabloidMVC.Controllers
             catch
             {
                 return View(tag);
+            }
+        }
+
+        // GET ManageTags
+        public ActionResult ManageTags(int postId)
+        {
+            List<Tag> Tags = _tagRepository.GetAll();
+            List<SelectListItem> SelectedTags = new List<SelectListItem>();
+            
+            foreach (Tag tag in Tags)
+            {
+                var selectList = new SelectListItem()
+                {
+                    Text = tag.Name,
+                    Value = tag.Name,
+                    Selected = false
+                };
+                SelectedTags.Add(selectList);
+            }
+            var vm = new ManageTagViewModel()
+            {
+                PostId = postId,
+                Tags = SelectedTags
+            };
+
+            return View(vm);
+        }
+
+        // POST ManageTags
+        [HttpPost]
+        public ActionResult ManageTags(List<Tag> selectedTags, int postId)
+        {
+            try
+            {
+                _tagRepository.DeleteAllPostTags(postId);
+                foreach(var item in selectedTags)
+                {
+                   _tagRepository.AddPostTags(item.Id, postId);
+                }
+                return RedirectToAction("Details", "Post", new {id = postId});
+            }
+            catch
+            {
+                return NotFound();
             }
         }
     }
