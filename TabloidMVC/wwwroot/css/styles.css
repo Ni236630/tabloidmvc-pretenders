@@ -194,6 +194,11 @@ img {
     border-style: none;
 }
 
+profileImage {
+    max-height: 200px;
+    max-width: 200px;
+}
+
 svg {
     overflow: hidden;
     vertical-align: middle;

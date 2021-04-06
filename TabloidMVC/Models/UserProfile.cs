@@ -9,7 +9,9 @@ namespace TabloidMVC.Models
     public class UserProfile
     {
         public int Id { get; set; }
+        [DisplayName("First Name")]
         public string FirstName { get; set; }
+        [DisplayName("Last Name")]
         public string LastName { get; set; }
         
         [DisplayName("User Name")]
@@ -24,6 +26,7 @@ namespace TabloidMVC.Models
 
         [DisplayName("Account Type")]
         public int UserTypeId { get; set; }
+        [DisplayName("User Role")]
         public UserType UserType { get; set; }
         [DisplayName("Full Name")]
         public string FullName

@@ -33,6 +33,12 @@ namespace TabloidMVC.Controllers
         {
             return View();
         }
+        //GET: Deativated Accounts!!!
+        public ActionResult DeactivatedIndex()
+        {
+            List<UserProfile> deactivatedUsers = _userProfileRepository.GetDeactivated();
+            return View(deactivatedUsers);
+        }
 
         [HttpPost]
         public async Task<IActionResult> Login(Credentials credentials)
@@ -172,7 +178,63 @@ namespace TabloidMVC.Controllers
             return int.Parse(id);
         }
 
+        //GET: Account/Delete/id
+        public ActionResult Deactivate(int id)
+        {
+            UserProfile user = _userProfileRepository.GetById(id);
+            return View(user);
+        }
+
+        //POST: Account/Delete/id
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Deactivate(UserProfile userProfile)
+        {
+            int getUser = GetCurrentUserId();
+            int adminCount = _userProfileRepository.getAdminCount();
+            if (adminCount <= 1 && getUser == userProfile.Id)
+            {
+                return NotFound();
+            }
+            else
+            {
+                try
+                {
+                    _userProfileRepository.DeactivateUser(userProfile.Id);
+                    return RedirectToAction("Index");
+                }
+                catch (Exception ex)
+                {
+                    return View(userProfile);
+                }
+            }
+            }
+        //GET: Account/Reactivate/id
+        public ActionResult Reactivate(int id)
+        {
+            UserProfile user = _userProfileRepository.GetById(id);
+            return View(user);
+        }
+
+        //POST: Account/Delete/id
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Reactivate(UserProfile userProfile)
+        {
+          
+                try
+                {
+                    _userProfileRepository.ReactivateUser(userProfile.Id);
+                    return RedirectToAction("Index");
+                }
+                catch (Exception ex)
+                {
+                    return View(userProfile);
+                }
+            
+        }
+
     }
-    }
+}
 
 

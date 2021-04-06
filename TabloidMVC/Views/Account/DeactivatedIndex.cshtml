@@ -1,17 +1,11 @@
 ﻿@model IEnumerable<TabloidMVC.Models.UserProfile>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "DeactivatedIndex";
 }
-<div class="container pt-5">
 
-    <h1>All Users</h1>
-
-
-    <p>
-        <a class="btn btn-primary" asp-action="DeactivatedIndex">View Deactivated Users</a>
-    </p>
-
+<div class=" container pt-5">
+    <h1>Deactivated Users</h1>
     <table class="table">
         <thead>
             <tr>
@@ -56,12 +50,15 @@
                         <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-primary mx-1" title="Edit">
                             <i class="fas fa-pencil-alt"></i>
                         </a>
-                        <a asp-action="Deactivate" asp-route-id="@item.Id" class="btn btn-outline-primary mx-1 " title="Deactivate">
-                            Deactivate
+                        <a asp-action="Reactivate" asp-route-id="@item.Id" class="btn btn-outline-primary mx-1 " title="Reactivate">
+                            Reactivate
                         </a>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
+    <p>
+        <a class="btn btn-primary" asp-action="Index">Back</a>
+    </p>
 </div>
