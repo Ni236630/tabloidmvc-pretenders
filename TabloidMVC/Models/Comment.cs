@@ -15,6 +15,8 @@ namespace TabloidMVC.Models
 
         public DateTime CreateDateTime { get; set; }
 
+        public string CommentAuthor { get; set; }
+
 
     }
 }

@@ -32,11 +32,14 @@ namespace TabloidMVC.Controllers
         {
             List<Comment> comments = _commentRepository.GetAllCommentsByPostId(id);
             Post post = _postRepository.GetPublishedPostById(id);
+            
 
             CommentViewModel vm = new CommentViewModel()
             {
                 comments = comments,
-                post = post
+                post = post,
+
+               
             };
 
             return View("Index", vm);
@@ -142,6 +145,8 @@ namespace TabloidMVC.Controllers
             string id = User.FindFirstValue(ClaimTypes.NameIdentifier);
             return int.Parse(id);
         }
+
+       
     }
 
 }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TabloidMVC.Models;
 using TabloidMVC.Models.ViewModels;
+using TabloidMVC.Utils;
 
 namespace TabloidMVC.Repositories
 {
@@ -19,9 +20,10 @@ namespace TabloidMVC.Repositories
                 conn.Open();
                 using (var cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @"Select c.Id, c.PostId, c.UserProfileId, c.Subject, c.Content, c.CreateDateTime
+                    cmd.CommandText = @"Select c.Id, c.PostId, c.UserProfileId, c.Subject, c.Content, c.CreateDateTime, up.DisplayName AS CommentAuthor
                                             FROM Comment c
                                             JOIN Post p ON p.id = c.PostId
+                                            JOIN UserProfile up ON c.UserProfileId = up.Id
                                             WHERE c.PostId = @id
                                         ORDER BY CreateDateTime ASC";
                     cmd.Parameters.AddWithValue("@id", id);
@@ -40,8 +42,8 @@ namespace TabloidMVC.Repositories
                             UserProfileId = reader.GetInt32(reader.GetOrdinal("UserProfileId")),
                             Subject = reader.GetString(reader.GetOrdinal("Subject")),
                             Content = reader.GetString(reader.GetOrdinal("Content")),
-                            CreateDateTime = reader.GetDateTime(reader.GetOrdinal("CreateDateTime"))
-
+                            CreateDateTime = reader.GetDateTime(reader.GetOrdinal("CreateDateTime")),
+                            CommentAuthor = reader.GetString(reader.GetOrdinal("CommentAuthor"))
                         });
                     }
 

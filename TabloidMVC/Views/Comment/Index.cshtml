@@ -17,7 +17,7 @@
                     @Html.DisplayNameFor(model => model.post.Title)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.post.UserProfile)
+                    @Html.DisplayNameFor(model => model.comment.UserProfileId)
                 </th>
                 <th>
                     Subject
@@ -40,7 +40,7 @@
                         @Html.DisplayFor(model => model.post.Title)
                     </td>
                     <td>
-                        @Html.DisplayFor(model => model.post.UserProfile.DisplayName)
+                        @Html.DisplayFor(modelItem => item.CommentAuthor)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Subject)
