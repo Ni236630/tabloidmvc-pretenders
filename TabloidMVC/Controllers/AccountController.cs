@@ -209,6 +209,30 @@ namespace TabloidMVC.Controllers
                 }
             }
             }
+        //GET: Account/Reactivate/id
+        public ActionResult Reactivate(int id)
+        {
+            UserProfile user = _userProfileRepository.GetById(id);
+            return View(user);
+        }
+
+        //POST: Account/Delete/id
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Reactivate(UserProfile userProfile)
+        {
+          
+                try
+                {
+                    _userProfileRepository.ReactivateUser(userProfile.Id);
+                    return RedirectToAction("Index");
+                }
+                catch (Exception ex)
+                {
+                    return View(userProfile);
+                }
+            
+        }
 
     }
 }
