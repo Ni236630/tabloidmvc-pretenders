@@ -19,11 +19,11 @@
                 </div>
 
                 @*Content*@
-                <div class="form-group">
-                    <label asp-for="Post.Content" class="control-label"></label>
-                    <input asp-for="Post.Content" class="form-control" />
-                    <span asp-validation-for="Post.Content" class="text-danger"></span>
-                </div>
+            <div class="form-group">
+                <label asp-for="Post.Content" class="control-label"></label>
+                <textarea asp-for="Post.Content" rows="15" class="form-control post__content-input"></textarea>
+                <span asp-validation-for="Post.Content" class="text-danger"></span>
+            </div>
 
                 @*Category*@
                 <div class="form-group">
