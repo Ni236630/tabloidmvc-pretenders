@@ -144,17 +144,16 @@ namespace TabloidMVC.Controllers
 
         // POST ManageTags
         [HttpPost]
-        public ActionResult ManageTags(List<SelectListItem> selectedTags, Post post)
+        public ActionResult ManageTags(ManageTagViewModel vm)
         {
             try
             {
-                _tagRepository.DeleteAllPostTags(post.Id);
-                foreach(var item in selectedTags)
+                _tagRepository.DeleteAllPostTags(vm.PostId);
+                foreach(var tagId in vm.SelectedTagIds)
                 {
-                    int tagId = Int32.Parse(item.Value);
-                   _tagRepository.AddPostTags(tagId, post.Id);
+                   _tagRepository.AddPostTags(tagId, vm.PostId);
                 }
-                return RedirectToAction("Details", "Post", new {id = post.Id});
+                return RedirectToAction("Details", "Post", new {id = vm.PostId});
             }
             catch
             {

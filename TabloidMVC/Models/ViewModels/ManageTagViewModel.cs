@@ -10,7 +10,7 @@ namespace TabloidMVC.Models.ViewModels
     public class ManageTagViewModel
     {
         public int PostId { get; set; }
-        public List<Tag> SelectedTags { get; set; }
+        public List<int> SelectedTagIds { get; set; }
         public List<SelectListItem> Tags { get; set; }
     }
 }

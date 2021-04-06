@@ -3,13 +3,20 @@
 @{
     ViewData["Title"] = "ManageTags";
 }
+
 <div class="container pt-5">
     <h1>ManageTags</h1>
-
-    @using (Html.BeginForm())
-    {
-        @Html.ListBoxFor(t => t.SelectedTags, Model.Tags)
-        <br />
-        <input type="submit" value="Submit" />
-    }
+    <form asp-action="ManageTags">
+        <div class="form-group">
+            <label asp-for="SelectedTagIds" class="control-label"></label>
+            <select asp-for="SelectedTagIds" class="form-control" asp-items="@Model.Tags">
+                <option value="">Select Category</option>
+            </select>
+            <span asp-validation-for="SelectedTagIds" class="text-danger"></span>
+        </div>
+        <input asp-for="PostId" type="hidden" />
+        <div class="form-group">
+            <input type="submit" value="Save" class="btn btn-primary" />
+        </div>
+    </form>
 </div>
