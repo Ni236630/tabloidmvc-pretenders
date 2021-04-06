@@ -118,7 +118,7 @@ namespace TabloidMVC.Controllers
         }
 
         // GET ManageTags
-        public ActionResult ManageTags(int postId)
+        public ActionResult ManageTags(Post post)
         {
             List<Tag> Tags = _tagRepository.GetAll();
             List<SelectListItem> SelectedTags = new List<SelectListItem>();
@@ -128,14 +128,14 @@ namespace TabloidMVC.Controllers
                 var selectList = new SelectListItem()
                 {
                     Text = tag.Name,
-                    Value = tag.Name,
+                    Value = tag.Id.ToString(),
                     Selected = false
                 };
                 SelectedTags.Add(selectList);
             }
             var vm = new ManageTagViewModel()
             {
-                PostId = postId,
+                PostId = post.Id,
                 Tags = SelectedTags
             };
 
@@ -144,16 +144,17 @@ namespace TabloidMVC.Controllers
 
         // POST ManageTags
         [HttpPost]
-        public ActionResult ManageTags(List<Tag> selectedTags, int postId)
+        public ActionResult ManageTags(List<SelectListItem> selectedTags, Post post)
         {
             try
             {
-                _tagRepository.DeleteAllPostTags(postId);
+                _tagRepository.DeleteAllPostTags(post.Id);
                 foreach(var item in selectedTags)
                 {
-                   _tagRepository.AddPostTags(item.Id, postId);
+                    int tagId = Int32.Parse(item.Value);
+                   _tagRepository.AddPostTags(tagId, post.Id);
                 }
-                return RedirectToAction("Details", "Post", new {id = postId});
+                return RedirectToAction("Details", "Post", new {id = post.Id});
             }
             catch
             {
