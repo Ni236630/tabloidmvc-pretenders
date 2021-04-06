@@ -108,7 +108,8 @@ namespace TabloidMVC.Repositories
                               ut.[Name] AS UserTypeName
                          FROM UserProfile u
                               LEFT JOIN UserType ut ON u.UserTypeId = ut.id
-                        WHERE email = @email";
+                        WHERE email = @email
+                        And IsDeactivated = 0";
                     cmd.Parameters.AddWithValue("@email", email);
 
                     UserProfile userProfile = null;

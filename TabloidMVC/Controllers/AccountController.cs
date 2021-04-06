@@ -184,16 +184,25 @@ namespace TabloidMVC.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Deactivate(UserProfile userProfile)
         {
-            try
+            int getUser = GetCurrentUserId();
+            int adminCount = _userProfileRepository.getAdminCount();
+            if (adminCount <= 1 && getUser == userProfile.Id)
             {
-                _userProfileRepository.DeactivateUser(userProfile.Id);
-                return RedirectToAction("Index");
+                return NotFound();
             }
-            catch (Exception ex)
+            else
             {
-                return View(userProfile);
+                try
+                {
+                    _userProfileRepository.DeactivateUser(userProfile.Id);
+                    return RedirectToAction("Index");
+                }
+                catch (Exception ex)
+                {
+                    return View(userProfile);
+                }
             }
-        }
+            }
 
     }
 }
