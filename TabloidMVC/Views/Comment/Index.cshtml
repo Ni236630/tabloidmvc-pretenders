@@ -1,0 +1,66 @@
+﻿@model TabloidMVC.Models.ViewModels.CommentViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+<div class="container">
+    <h1>Index</h1>
+
+    <p>
+       
+    </p>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.post.Title)
+                </th>
+                <th>
+                    Username
+                </th>
+                <th>
+                    Subject
+                </th>
+                <th>
+                    Content
+                </th>
+                <th>
+                    Created On
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.comments)
+            {
+                <tr>
+
+                    <td>
+                        @Html.DisplayFor(model => model.post.Title)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CommentAuthor)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Subject)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Content)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CreateDateTime)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-primary mx-1" title="Edit">
+                            <i class="fas fa-pencil-alt"></i>
+                        </a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-primary mx-1" title="Delete">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

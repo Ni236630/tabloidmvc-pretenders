@@ -114,13 +114,6 @@ namespace TabloidMVC.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
 
-                    
-
-
-                   // cmd.CommandText = @"DELETE PostTag FROM PostTag pt INNER JOIN Tag t ON pt.TagId = t.id WHERE pt.TagId = t.@id";
-                   // cmd.Parameters.AddWithValue("@id", tag.Id);
-                   // cmd.ExecuteNonQuery();
-
                     cmd.CommandText = @"DELETE PostTag FROM PostTag pt INNER JOIN Tag t ON pt.TagId = t.id WHERE pt.TagId = @id ;
                                         DELETE FROM Tag WHERE Id = @tagId ";
                     cmd.Parameters.AddWithValue("@id", tag.Id);
