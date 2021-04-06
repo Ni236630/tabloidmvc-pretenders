@@ -172,7 +172,30 @@ namespace TabloidMVC.Controllers
             return int.Parse(id);
         }
 
+        //GET: Account/Delete/id
+        public ActionResult Deactivate(int id)
+        {
+            UserProfile user = _userProfileRepository.GetById(id);
+            return View(user);
+        }
+
+        //POST: Account/Delete/id
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Deactivate(UserProfile userProfile)
+        {
+            try
+            {
+                _userProfileRepository.DeactivateUser(userProfile.Id);
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                return View(userProfile);
+            }
+        }
+
     }
-    }
+}
 
 
